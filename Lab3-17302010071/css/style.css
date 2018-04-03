@@ -50,7 +50,11 @@ footer {
 }
 
 body {
-    background-color: #E8EAF6
+    background-color: #E8EAF6;
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    min-width: 600px;
 }
 
 article {
@@ -115,7 +119,6 @@ section {
     margin-left: 0.5em;
     margin-bottom: 0.5em;
     margin-right: 0.5em;
-
 }
 
 .a1 {
@@ -125,7 +128,6 @@ section {
 .sec3 {
     padding-left: 1em;
     margin-bottom:1em;
-
 }
 
 .foot {
@@ -153,12 +155,18 @@ section {
     line-height: 0px;
 }
 
-hr{ margin-top: 0;
-    margin-bottom: 0;}
+hr{
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
-.sec1{margin-bottom: 0}
+.sec1{
+    margin-bottom: 0
+}
 
-.xian{color: white}
+.xian{
+    color: white
+}
 
 a.lian:hover{
     color: white;
@@ -172,4 +180,6 @@ a.a1:hover{
     padding: 0.3em;
 }
 
-a.border:link{text-decoration: none}
+a.border:link{
+    text-decoration: none
+}
