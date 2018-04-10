@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lab 04</title>
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./Lab04.css">
+</head>
+<body>
+<header>
+    <h1>Share Your Travels</h1>
+    <p>let us know where you've been</p>
+</header>
+<main>
+    <form action="/demo/demo_form.asp">
+        <fieldset>
+            <legend>PHOTO DETAILS</legend>
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <p>
+                            Title<br>
+                        <input placeholder="Give your photo a descriptive name" name="title">
+                        </p>
+                    <p>
+                        Description
+                        <textarea placeholder="Adding a rich description will help with search results"
+                                  name="title" rows="5"></textarea>
+                    </p>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        Continent<br>
+                        <select name="continent">
+                            <option value="content">Choose continent</option>
+                        </select><br>
+                        Country<br>
+                        <select name="country">
+                            <option value="country">Choose country</option>
+                        </select><br>
+                        City<br>
+                        <input type="text" name="city">
+                    </td>
+                    <td>
+                        <div class="box">
+                            Copyright?<br>
+                            <input type="radio" name="copyright" value=" All rights reserved">
+                            All rights reserved<br>
+                            <input type="radio" name="copyright" value="Creative Commons">Creative Commons
+                        </div>
+                        <div class="box">
+                            Creative Commons Types<br>
+                            <input type="checkbox" name=" Creative Commons Types" value="Attribution">
+                            Attribution<br>
+                            <input type="checkbox" name=" Creative Commons Types" value="Noncommercial">
+                            Noncommercial<br>
+                            <input type="checkbox" name=" Creative Commons Types" value="No Derivative Works">
+                            No Derivative Works
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="rectangle">
+                            <label>I accept the software license</label>
+                            <input type="checkbox" name="accept">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Rate this photo:<br>
+                        <input type="number" name="Rate this photo"><br>
+                        Color Collection:<br>
+                        <input type="color">
+                    </td>
+                    <td>
+                        <div class="box">
+                        Date Taken:<br>
+                        <input type="date" value=" 年 /月/日"><br>
+                        Time Taken:<br>
+                        <input type="time" value="--:--">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="rectangle">
+                        <button type="button" class="rounded">提交</button>
+                        <button type="button" class="rounded">Clear Form</button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </form>
+</main>
+</body>
+</html>
