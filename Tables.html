@@ -1,0 +1,262 @@
+<html>
+<head>
+    <title>Tables</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #select, #commit, #nowTable {
+            width: 300px;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        th {
+            background-color: grey;
+            color: whitesmoke;
+        }
+
+        tr:nth-child(odd) td {
+            background-color: lightgrey;
+        }
+
+        td {
+            padding: 0 0.5em;
+        }
+
+       .bt{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form id="form" name="form">
+    <select title="select" id="select" name="select">
+        <option>SELECT ONE</option>
+        <option>CREATE TABLE</option>
+        <option>ADD ROW</option>
+        <option>DELETE ROW</option>
+        <option>DELETE TABLE</option>
+    </select>
+    <div id="content"></div>
+    <div id="content2"></div>
+    <input class="bt" type="button" value="commit" id="commit">
+    <br>
+    <select title="nowTable" id="nowTable" name="nowTable">
+        <option>SELECT (default: last created)</option>
+    </select>
+</form>
+<div id="table"></div>
+<script>
+    function selectOne() {
+        switch (document.form.select.selectedIndex) {
+            case 0:
+                pleaseSelectOne();
+                break;
+            case 1:
+                displayInput();
+                break;
+            case 2:
+                addRow();
+                break;
+            case 3:
+                delRow();
+                break;
+            case 4:
+                delTable();
+                break;
+        }
+    }
+
+    function displayInput() {
+        document.getElementById("content").innerHTML = "";
+        document.getElementById("content2").innerHTML = "";
+        let input = document.createElement("input");
+        input.placeholder = "Table Name";
+        input.type = "text";
+        input.name = "input1";
+        input.id = "input1";
+        document.getElementById("content").appendChild(input);
+        let input2 = document.createElement("input");
+        input2.placeholder = "Columns Numbers";
+        input2.type = "number";
+        input2.name = "inputT";
+        input2.id = "inputT";
+        document.getElementById("content").appendChild(input2);
+        document.form.inputT.onchange = createTableHeader;
+    }
+
+    function createTableHeader() {
+        let valueOne = document.form.input1.value;
+        let valueTwo = document.form.inputT.value;
+        if (valueOne !== "" && valueTwo > 0) {
+            document.getElementById("content2").innerHTML = "";
+            document.getElementById("commit").style.display = "inline-block";
+            for (let i = 0; i < valueTwo; i++) {
+                let input = document.createElement("input");
+                input.placeholder = "Attribute";
+                input.type = "text";
+                input.className = "headerAttributes";
+                document.getElementById("content2").appendChild(input);
+            }
+            document.getElementById("commit").onclick = commit_create;
+        }
+    }
+
+    function pleaseSelectOne() {
+        document.getElementById("commit").style.display = "none";
+        document.getElementById("content").innerHTML = "";
+        document.getElementById("content2").innerHTML = "";
+    }
+
+    function addRow() {
+        add_del_inputs();
+        document.getElementById("commit").onclick = function () {
+            let table = tables[document.form.nowTable.selectedIndex - 1];
+            table.meAddRow(get_inputs_values());
+            renewTable(table);
+        };
+    }
+
+    function delRow() {
+        add_del_inputs();
+        document.getElementById("commit").onclick = function () {
+            let table = tables[document.form.nowTable.selectedIndex - 1];
+            table.meDeleteRow(get_inputs_values());
+            renewTable(table);
+        };
+    }
+
+    function delTable() {
+        document.getElementById("content").innerHTML =
+            "<p style=\"color: red\">WARNING: You cannot undo this action!</p>";
+        document.getElementById("content2").innerHTML = "";
+        document.getElementById("commit").onclick = commit_delete;
+    }
+
+    function add_del_inputs() {
+        if (document.form.nowTable.selectedIndex === 0) {
+            pleaseSelectOne();
+            return;
+        }
+        else {
+            document.getElementById("commit").style.display = "inline-block";
+            document.getElementById("content").innerHTML = "";
+            document.getElementById("content2").innerHTML = "";
+        }
+        let table = tables[document.form.nowTable.selectedIndex - 1];
+        for (let cal = 0; cal < table.attriNumber; cal++) {
+            let input = document.createElement("input");
+            input.placeholder = table.attris[cal];
+            input.type = "text";
+            document.getElementById("content").appendChild(input);
+        }
+        document.getElementById("commit").style.display = "inline-block";
+        document.getElementById("commit").onclick = commit_create;
+    }
+
+    function commit_create() {
+        let col_number_input = document.getElementById("inputT");
+        let name = document.getElementById("input1").value;
+        let number = col_number_input.value;
+        let attris = new Array(0);
+        let cols = document.getElementsByClassName("headerAttributes");
+        for (let i = 0; i < number; i++) {
+            attris.push(cols[i].value);
+        }
+        let table = new Table(name, number, attris);
+        tables.push(table);
+        renewTable(table);
+        let option = document.createElement("option");
+        option.innerText = name;
+        option.selected = true;
+        document.form.nowTable.appendChild(option);
+    }
+
+    function commit_delete() {
+        if (document.form.nowTable.selectedIndex === 0) {
+            return;
+        }
+        tables.splice(document.form.nowTable.selectedIndex - 1, 1);
+        document.getElementById("table").innerHTML = "";
+        document.form.nowTable.removeChild(document.form.nowTable.options[document.form.nowTable.selectedIndex]);
+        document.form.nowTable.options[0].selected = true;
+    }
+
+    function get_inputs_values() {
+        let list = new Array(0);
+        let inputs = document.getElementById("content");
+        for (let val of inputs.childNodes) {
+            list.push(val.value);
+        }
+        return list;
+    }
+
+    function renewTable(table) {
+        document.getElementById("table").innerHTML = "";
+        document.getElementById("table").appendChild(table.table);
+    }
+
+    class Table {
+        constructor(name, attrNumber, attributes) {
+            this.attriNumber = attrNumber;
+            this.attris = attributes;
+            this.table = document.createElement("table");
+            let th = this.table.createTHead();
+            let tr = document.createElement("tr");
+            let newCell;
+            for (let i = 0; i < this.attriNumber; i++) {
+                newCell = tr.insertCell(i);
+                newCell.innerText = attributes[i];
+            }
+            th.appendChild(tr);
+            this.table.createTBody();
+        }
+
+        meAddRow(list) {
+            let newRow = this.table.tBodies[0].insertRow(this.table.length);
+            let newCell;
+            for (let i = 0; i < this.attriNumber; i++) {
+                newCell = newRow.insertCell(i);
+                newCell.innerText = list[i];
+            }
+        }
+
+        meDeleteRow(list) {
+            let iter = this.table.tBodies[0].childNodes[Symbol.iterator]();
+            let o = iter.next();
+            while (!o.done) {
+                let r = o.value.childNodes;
+                let flag = true;
+                for (let i = 0; i < list.length; i++) {
+                    if (!(list[i] === (r[i]).innerText || list[i] === "")) {
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    this.table.tBodies[0].removeChild(o.value);
+                    iter = this.table.tBodies[0].childNodes[Symbol.iterator]();
+                    o = iter.next();
+                }
+                else {
+                    o = iter.next();
+                }
+            }
+        }
+    }
+
+    window.tables = new Array(0);
+    document.form.select.onchange = selectOne;
+    document.form.nowTable.onchange = function () {
+        if (document.form.nowTable.selectedIndex === 0) {
+            document.getElementById("table").innerHTML = "";
+            return;
+        }
+        let table = tables[document.form.nowTable.selectedIndex - 1];
+        renewTable(table);
+    };
+</script>
+</body>
