@@ -11,8 +11,8 @@
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" href="cs s/bootstrap.min.css" />
-    <link rel="stylesheet" href="cs s/bootstrap-theme.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
 
 </head>
 
